@@ -5,6 +5,7 @@ using RestSharp;
 using Plivo.Util;
 using RestSharp.Deserializers;
 using dict = System.Collections.Generic.Dictionary<string, string>;
+using RestSharp.Authenticators;
 
 namespace Plivo.API
 {
@@ -118,18 +119,6 @@ namespace Plivo.API
             string subauth_id = get_key_value(ref parameters, "subauth_id");
             return _request<GenericResponse>("DELETE", String.Format("/Subaccount/{0}/", subauth_id), parameters);
         }
-
-        /* private static dict mask_if_empty_params(dict parameters)
-         {
-             if (parameters.Count >= 0)
-             {
-                 return parameters;
-             }
-             else{
-                 return new dict();
-             }
-
-         }*/
 
         // Applications //
         public IRestResponse<ApplicationList> get_applications()
@@ -265,11 +254,31 @@ namespace Plivo.API
             return _request<CDR>("GET", String.Format("/Call/{0}/", record_id), parameters);
         }
 
-        public IRestResponse<LiveCallList> get_live_calls()
+        public IRestResponse<CallList> get_ringing_calls()
+        {
+            dict parameters = new dict();
+            parameters.Add("status", "ringing");
+            return _request<CallList>("GET", "/Call/", parameters);
+        }
+
+        public IRestResponse<CallList> get_inprogress_calls()
+        {
+            dict parameters = new dict();
+            parameters.Add("status", "in-progress");
+            return _request<CallList>("GET", "/Call/", parameters);
+        }
+
+        public IRestResponse<CallList> get_queued_calls()
+        {
+            dict parameters = new dict();
+            parameters.Add("status", "queued");
+            return _request<CallList>("GET", "/Call/", parameters);
+        }
+        public IRestResponse<CallList> get_live_calls()
         {
             dict parameters = new dict();
             parameters.Add("status", "live");
-            return _request<LiveCallList>("GET", "/Call/", parameters);
+            return _request<CallList>("GET", "/Call/", parameters);
         }
 
         public IRestResponse<LiveCall> get_live_call(dict parameters)

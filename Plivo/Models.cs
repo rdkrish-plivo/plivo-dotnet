@@ -301,7 +301,7 @@ namespace Plivo.API
         public string error { get; set; }
     }
 
-    public class LiveCallList : PlivoResponse
+    public class CallList : PlivoResponse
     {
         public string api_id { get; set; }
         public List<string> calls { get; set; }
